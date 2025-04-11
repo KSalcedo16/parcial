@@ -1,0 +1,152 @@
+/* src/app/components/game-board/game-board.component.scss */
+// Variables para neumorfismo
+$background-color: #e0e5ec;
+$shadow-dark: #a3b1c6;
+$shadow-light: #ffffff;
+$text-color: #4a5568;
+$accent-color: #6b8cce;
+$border-radius: 15px;
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 30px;
+  background-color: $background-color;
+  border-radius: $border-radius;
+  box-shadow: 
+    8px 8px 15px $shadow-dark,
+    -8px -8px 15px $shadow-light;
+  color: $text-color;
+}
+
+.game-header {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+  
+  h1 {
+    color: darken($text-color, 10%);
+    margin-bottom: 20px;
+    font-size: 2.2rem;
+    text-shadow: 1px 1px 2px $shadow-light;
+  }
+}
+
+.players-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 20px;
+}
+
+.player-info {
+  padding: 15px 25px;
+  border-radius: $border-radius;
+  background-color: $background-color;
+  box-shadow: 
+    5px 5px 10px $shadow-dark,
+    -5px -5px 10px $shadow-light;
+  transition: all 0.3s ease;
+  
+  &.active {
+    background: linear-gradient(145deg, #cad5e2, #e0e5ec);
+    box-shadow: 
+      inset 4px 4px 8px $shadow-dark,
+      inset -4px -4px 8px $shadow-light;
+    color: $accent-color;
+    transform: translateY(-2px);
+    border-left: 4px solid $accent-color;
+  }
+  
+  h3 {
+    margin: 0 0 5px;
+    color: darken($text-color, 5%);
+  }
+  
+  p {
+    margin: 0;
+    font-weight: bold;
+  }
+}
+
+.board {
+  width: 100%;
+  margin-top: 30px;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  justify-items: center;
+  
+  app-card {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: $border-radius;
+    box-shadow: 
+      5px 5px 10px $shadow-dark,
+      -5px -5px 10px $shadow-light;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 
+        7px 7px 12px $shadow-dark,
+        -7px -7px 12px $shadow-light;
+    }
+  }
+}
+
+.reset-button {
+  padding: 12px 25px;
+  background-color: $background-color;
+  color: $text-color;
+  border: none;
+  border-radius: $border-radius;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 10px;
+  box-shadow: 
+    5px 5px 10px $shadow-dark,
+    -5px -5px 10px $shadow-light;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    box-shadow: 
+      3px 3px 6px $shadow-dark,
+      -3px -3px 6px $shadow-light;
+  }
+  
+  &:active {
+    box-shadow: 
+      inset 3px 3px 6px $shadow-dark,
+      inset -3px -3px 6px $shadow-light;
+    background-color: darken($background-color, 5%);
+    transform: translateY(2px);
+  }
+}
+
+@media (max-width: 600px) {
+  .cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  
+  .players-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .game-container {
+    padding: 20px;
+  }
+  
+  .game-header h1 {
+    font-size: 1.8rem;
+  }
+}
