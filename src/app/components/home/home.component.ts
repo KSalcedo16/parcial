@@ -22,7 +22,7 @@ export class HomeComponent {
   player1Password: string = '';
   player2Email: string = '';
   player2Password: string = '';
-  mostrarListaUsuarios: boolean = false;
+  mostrarListaUsuarios: boolean = false; // RESUELTO: Manteniendo tu versión local aquí.
 
   
 constructor(
@@ -56,7 +56,7 @@ startGame(): void {
     error: () => {
       alert('Hubo un problema al registrar el jugador. Intenta nuevamente.');
     }
-  });
+  }); // RESUELTO: Manteniendo tu versión local aquí.
 
   } else {
     if (
@@ -87,10 +87,10 @@ startGame(): void {
   }
 }
 usuariosRegistrados: any[] = [];
-mostrarUsuarios: boolean = false;
+mostrarUsuarios: boolean = false; // Esta variable parece duplicar mostrarListaUsuarios, puedes consolidarlas si lo deseas.
 
 cargarUsuarios(): void {
-  this.mostrarListaUsuarios = !this.mostrarListaUsuarios;
+  this.mostrarListaUsuarios = !this.mostrarListaUsuarios; // RESUELTO: Manteniendo tu versión local aquí.
 
   if (this.mostrarListaUsuarios && this.usuariosRegistrados.length === 0) {
     this.usuarioService.obtenerUsuarios().subscribe({
@@ -104,9 +104,7 @@ cargarUsuarios(): void {
   }
 }
 
-
-eliminarUsuario(id: string): void {
-  if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
+  eliminarUsuario(id: string): void { 
     this.usuarioService.eliminarUsuario(id).subscribe({
       next: () => {
         this.usuariosRegistrados = this.usuariosRegistrados.filter(user => user.id !== id);
@@ -116,7 +114,7 @@ eliminarUsuario(id: string): void {
       }
     });
   }
-}
+
 
 filtro: string = '';
 
