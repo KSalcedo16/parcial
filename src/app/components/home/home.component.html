@@ -50,20 +50,18 @@
       <input type="password" id="password2" [(ngModel)]="player2Password" placeholder="Contraseña del Jugador 2">
     </div>
     <button class="start-button" (click)="cargarUsuarios()">Mostrar Usuarios Registrados</button>
-
-    <div *ngIf="mostrarUsuarios" class="setup-container" style="margin-top: 30px;">
-      <h2>Usuarios Registrados</h2>
-      <ul>
-        <li *ngFor="let usuario of usuariosRegistrados">
-          <strong>{{ usuario.name }}</strong> - {{ usuario.email }}
-        </li>
-      </ul>
-    </div>
     
     <div *ngIf="mostrarUsuarios" class="setup-container" style="margin-top: 30px;">
     <h2>Usuarios Registrados</h2>
+    <input
+      type="text"
+      placeholder="Filtrar por nombre o email"
+      [(ngModel)]="filtro"
+      class="input-filter"
+      style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 8px;"
+    />
     <ul>
-      <li *ngFor="let usuario of usuariosRegistrados">
+      <li *ngFor="let usuario of usuariosRegistradosFiltrados">
         <strong>{{ usuario.name }}</strong> - {{ usuario.email }}
         <button (click)="eliminarUsuario(usuario.id)" style="margin-left: 10px; color: red;">Eliminar</button>
       </li>

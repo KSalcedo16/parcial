@@ -106,4 +106,13 @@ eliminarUsuario(id: string): void {
   }
 }
 
+filtro: string = '';
+
+get usuariosRegistradosFiltrados(): any[] {
+  return this.usuariosRegistrados.filter(usuario =>
+    usuario.name.toLowerCase().includes(this.filtro.toLowerCase()) ||
+    usuario.email.toLowerCase().includes(this.filtro.toLowerCase())
+  );
+}
+
 }
