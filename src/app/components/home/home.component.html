@@ -30,27 +30,47 @@
         <input type="text" id="player2" [(ngModel)]="player2Name" placeholder="Nombre del Jugador 2">
       </div>
        <!-- Dentro de .player-inputs -->
-<div class="input-group">
-  <label for="email1">Correo electrónico</label>
-  <input type="email" id="email1" [(ngModel)]="player1Email" placeholder="Correo del Jugador 1">
-</div>
-
-<div class="input-group">
-  <label for="password1">Contraseña</label>
-  <input type="password" id="password1" [(ngModel)]="player1Password" placeholder="Contraseña del Jugador 1">
-</div>
-
-<div class="input-group" *ngIf="playerMode === 'multi'">
-  <label for="email2">Correo electrónico Jugador 2</label>
-  <input type="email" id="email2" [(ngModel)]="player2Email" placeholder="Correo del Jugador 2">
-</div>
-
-<div class="input-group" *ngIf="playerMode === 'multi'">
-  <label for="password2">Contraseña Jugador 2</label>
-  <input type="password" id="password2" [(ngModel)]="player2Password" placeholder="Contraseña del Jugador 2">
-</div>
-
+    <div class="input-group">
+      <label for="email1">Correo electrónico</label>
+      <input type="email" id="email1" [(ngModel)]="player1Email" placeholder="Correo del Jugador 1">
     </div>
+
+    <div class="input-group">
+      <label for="password1">Contraseña</label>
+      <input type="password" id="password1" [(ngModel)]="player1Password" placeholder="Contraseña del Jugador 1">
+    </div>
+
+    <div class="input-group" *ngIf="playerMode === 'multi'">
+      <label for="email2">Correo electrónico Jugador 2</label>
+      <input type="email" id="email2" [(ngModel)]="player2Email" placeholder="Correo del Jugador 2">
+    </div>
+
+    <div class="input-group" *ngIf="playerMode === 'multi'">
+      <label for="password2">Contraseña Jugador 2</label>
+      <input type="password" id="password2" [(ngModel)]="player2Password" placeholder="Contraseña del Jugador 2">
+    </div>
+    <button class="start-button" (click)="cargarUsuarios()">Mostrar Usuarios Registrados</button>
+
+    <div *ngIf="mostrarUsuarios" class="setup-container" style="margin-top: 30px;">
+      <h2>Usuarios Registrados</h2>
+      <ul>
+        <li *ngFor="let usuario of usuariosRegistrados">
+          <strong>{{ usuario.name }}</strong> - {{ usuario.email }}
+        </li>
+      </ul>
+    </div>
+    
+    <div *ngIf="mostrarUsuarios" class="setup-container" style="margin-top: 30px;">
+    <h2>Usuarios Registrados</h2>
+    <ul>
+      <li *ngFor="let usuario of usuariosRegistrados">
+        <strong>{{ usuario.name }}</strong> - {{ usuario.email }}
+        <button (click)="eliminarUsuario(usuario.id)" style="margin-left: 10px; color: red;">Eliminar</button>
+      </li>
+    </ul>
+  </div>
+
+  </div>
    
     <button class="start-button" (click)="startGame()">Comenzar Juego</button>
   </div>

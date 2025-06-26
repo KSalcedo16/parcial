@@ -78,4 +78,32 @@ startGame(): void {
     });
   }
 }
+usuariosRegistrados: any[] = [];
+mostrarUsuarios: boolean = false;
+
+cargarUsuarios(): void {
+  this.usuarioService.obtenerUsuarios().subscribe({
+    next: (usuarios) => {
+      this.usuariosRegistrados = usuarios;
+      this.mostrarUsuarios = true;
+    },
+    error: () => {
+      alert('Error al cargar los usuarios');
+    }
+  });
+}
+
+eliminarUsuario(id: string): void {
+  if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
+    this.usuarioService.eliminarUsuario(id).subscribe({
+      next: () => {
+        this.usuariosRegistrados = this.usuariosRegistrados.filter(user => user.id !== id);
+      },
+      error: () => {
+        alert('Error al eliminar el usuario');
+      }
+    });
+  }
+}
+
 }

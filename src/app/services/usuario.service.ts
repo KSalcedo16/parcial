@@ -24,4 +24,14 @@ export class UsuarioService {
 
     return this.http.post(this.apiUrl, body);
   }
+
+  obtenerUsuarios(): Observable<any[]> {
+  return this.http.get<any[]>('https://apigame.gonzaloandreslucio.com/api/users');
+}
+
+  eliminarUsuario(id: string): Observable<any> {
+  const url = `https://apigame.gonzaloandreslucio.com/api/users/${id}`;
+  return this.http.delete(url);
+}
+
 }
