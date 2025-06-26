@@ -1,82 +1,104 @@
-<!-- src/app/components/home/home.component.html -->
 <div class="container">
   <h1 class="title">Juego de Memoria de Pares</h1>
-  
+
   <div *ngIf="!gameStarted" class="setup-container">
     <h2>Configuración del Juego</h2>
-    
+
     <div class="mode-selector">
       <h3>Selecciona el modo de juego:</h3>
       <div class="radio-group">
-        <label>
-          <input type="radio" name="playerMode" [(ngModel)]="playerMode" value="single">
-          Un jugador
-        </label>
-        <label>
-          <input type="radio" name="playerMode" [(ngModel)]="playerMode" value="multi">
-          Dos jugadores
-        </label>
+        <label><input type="radio" name="playerMode" [(ngModel)]="playerMode" value="single"> Un jugador</label>
+        <label><input type="radio" name="playerMode" [(ngModel)]="playerMode" value="multi"> Dos jugadores</label>
       </div>
     </div>
-    
+
+      <label>
+      <input type="checkbox" [(ngModel)]="usarRegistrados">
+      Usar jugadores registrados
+    </label>
+
+    <!-- Campos de entrada para nuevo jugador o selección de registrado -->
     <div class="player-inputs">
-      <div class="input-group">
-        <label for="player1">Jugador 1</label>
-        <input type="text" id="player1" [(ngModel)]="player1Name" placeholder="Nombre del Jugador 1">
-      </div>
-      
-      <div class="input-group" *ngIf="playerMode === 'multi'">
-        <label for="player2">Jugador 2</label>
-        <input type="text" id="player2" [(ngModel)]="player2Name" placeholder="Nombre del Jugador 2">
-      </div>
-       
-      <div class="input-group">
-        <label for="email1">Correo electrónico</label>
-        <input type="email" id="email1" [(ngModel)]="player1Email" placeholder="Correo del Jugador 1">
-      </div>
+      <!-- JUGADOR 1 -->
+      <ng-container *ngIf="!usarRegistrados">
+        <div class="input-group">
+          <label>Nombre Jugador 1</label>
+          <input type="text" [(ngModel)]="player1Name">
+        </div>
+        <div class="input-group">
+          <label>Email</label>
+          <input type="email" [(ngModel)]="player1Email">
+        </div>
+        <div class="input-group">
+          <label>Contraseña</label>
+          <input type="password" [(ngModel)]="player1Password">
+        </div>
+      </ng-container>
 
-      <div class="input-group">
-        <label for="password1">Contraseña</label>
-        <input type="password" id="password1" [(ngModel)]="player1Password" placeholder="Contraseña del Jugador 1">
-      </div>
+      <ng-container *ngIf="usarRegistrados">
+        <div class="input-group">
+          <label>Jugador 1 (registrado)</label>
+          <select [(ngModel)]="jugadorRegistrado1">
+            <option *ngFor="let usuario of usuariosRegistrados" [value]="usuario.name">
+              {{ usuario.name }} ({{ usuario.email }})
+            </option>
+          </select>
+        </div>
+      </ng-container>
 
-      <div class="input-group" *ngIf="playerMode === 'multi'">
-        <label for="email2">Correo electrónico Jugador 2</label>
-        <input type="email" id="email2" [(ngModel)]="player2Email" placeholder="Correo del Jugador 2">
-      </div>
+      <!-- JUGADOR 2 -->
+      <ng-container *ngIf="playerMode === 'multi'">
+        <ng-container *ngIf="!usarRegistrados">
+          <div class="input-group">
+            <label>Nombre Jugador 2</label>
+            <input type="text" [(ngModel)]="player2Name">
+          </div>
+          <div class="input-group">
+            <label>Email</label>
+            <input type="email" [(ngModel)]="player2Email">
+          </div>
+          <div class="input-group">
+            <label>Contraseña</label>
+            <input type="password" [(ngModel)]="player2Password">
+          </div>
+        </ng-container>
 
-      <div class="input-group" *ngIf="playerMode === 'multi'">
-        <label for="password2">Contraseña Jugador 2</label>
-        <input type="password" id="password2" [(ngModel)]="player2Password" placeholder="Contraseña del Jugador 2">
-      </div>
-     
-      <button class="start-button" (click)="cargarUsuarios()">
-        {{ mostrarListaUsuarios ? 'Ocultar Usuarios Registrados' : 'Mostrar Usuarios Registrados' }}
-      </button>
-
-      <div *ngIf="mostrarListaUsuarios" class="setup-container" style="margin-top: 30px;">
-        <h2>Usuarios Registrados</h2>
-
-        <input
-          type="text"
-          placeholder="Filtrar por nombre o email"
-          [(ngModel)]="filtro"
-          class="input-filter"
-          style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 8px;"
-        />
-
-        <ul>
-          <li *ngFor="let usuario of usuariosRegistradosFiltrados">
-            <strong>{{ usuario.name }}</strong> - {{ usuario.email }}
-            <button (click)="eliminarUsuario(usuario.id)" style="margin-left: 10px; color: red;">Eliminar</button>
-          </li>
-        </ul>
-      </div>
-    
+        <ng-container *ngIf="usarRegistrados">
+          <div class="input-group">
+            <label>Jugador 2 (registrado)</label>
+            <select [(ngModel)]="jugadorRegistrado2">
+              <option *ngFor="let usuario of usuariosRegistrados" [value]="usuario.name">
+                {{ usuario.name }} ({{ usuario.email }})
+              </option>
+            </select>
+          </div>
+        </ng-container>
+      </ng-container>
     </div>
-      
+
     <button class="start-button" (click)="startGame()">Comenzar Juego</button>
+
+    <hr>
+
+    <!-- BOTÓN PARA VER/OCULTAR USUARIOS -->
+      <button class="start-button" (click)="cargarUsuarios()">
+        {{ mostrarListaUsuarios ? 'Ocultar Lista de Usuarios' : 'Mostrar Lista de Usuarios' }}
+      </button>
+    <!-- LISTADO DE USUARIOS REGISTRADOS (con filtro y eliminar) -->
+    <div class="lista-usuarios" *ngIf="mostrarListaUsuarios" style="margin-top: 20px;">
+      <input type="text" [(ngModel)]="filtro" placeholder="Filtrar usuarios por nombre o email" />
+
+      <ul *ngIf="usuariosRegistradosFiltrados.length > 0">
+        <li *ngFor="let usuario of usuariosRegistradosFiltrados">
+          {{ usuario.name }} - {{ usuario.email }}
+          <button (click)="eliminarUsuario(usuario.id)">❌</button>
+        </li>
+      </ul>
+
+      <p *ngIf="usuariosRegistradosFiltrados.length === 0">No hay usuarios que coincidan con el filtro.</p>
+    </div>
   </div>
-  
+
+  <!-- TABLERO DE JUEGO -->
   <app-game-board *ngIf="gameStarted"></app-game-board>
 </div>
