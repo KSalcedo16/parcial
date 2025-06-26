@@ -36,4 +36,11 @@ export class GameBoardComponent implements OnInit {
       this.gameService.resetGame();
     }
   }
+
+// En GameBoardComponent
+playAgain(): void {
+  if (confirm('¿Quieres comenzar una nueva partida con los mismos jugadores?')) {
+    this.gameService.playAgain();
+  }
+}
 }

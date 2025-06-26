@@ -1,26 +1,19 @@
-<!-- src/app/components/game-board/game-board.component.html -->
-<div class="game-container">
-  <div class="game-header">
-    <h1>Descubre Las Cartas Ocultas</h1>
-    
-    <div class="players-container">
-      <div *ngFor="let player of players$ | async; let i = index" 
-           class="player-info" 
-           [ngClass]="{'active': player.turn}">
-        <h3>{{ player.name }}</h3>
-        <p>Puntuación: {{ player.score }}</p>
-      </div>
-    </div>
-    
-    <button class="reset-button" (click)="resetGame()">Reiniciar Juego</button>
-  </div>
-  
-  <div class="board">
-    <div class="cards-grid">
-      <app-card *ngFor="let card of cards$ | async" 
-                [card]="card" 
-                (cardClick)="onCardClick($event)">
-      </app-card>
-    </div>
-  </div>
+<!-- src/app/components/agame-board/game-board.component.html --> 
+<div class="game-container">   
+  <div class="game-header">     
+    <h1>Descubre Las Cartas Ocultas</h1>       
+    <div class="players-container">      
+      <div *ngFor="let player of players$ | async; let i = index" class="player-info"  [ngClass]="{'active': player.turn}">      
+          <h3>{{ player.name }}</h3> 
+          <p>Puntuación: {{ player.score }}</p>      
+      </div>     
+    </div>       
+      <button class="reset-button" (click)="resetGame()">Reiniciar Juego</button>     
+      <button class="reset-button" (click)="playAgain()">Volver a Jugar</button>   
+      </div>      
+      <div class="board">    
+        <div class="cards-grid">       
+          <app-card *ngFor="let card of cards$ | async" [card]="card" (cardClick)="onCardClick($event)"> </app-card>   
+        </div>   
+      </div> 
 </div>

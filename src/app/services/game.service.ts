@@ -152,15 +152,29 @@ export class GameService {
     this.cardsSubject.next(updatedCards);
     this.selectedCards = [];
     
-    // Verificar si el juego ha terminado
-    if (updatedCards.every(card => card.matched)) {
-      setTimeout(() => {
-        alert('¡Juego terminado!');
-        // Aquí mostrar un resumen o reiniciar el juego
-      }, 500);
-    }
+   // Verificar si el juego ha terminado
+  if (updatedCards.every(card => card.matched)) {
+    setTimeout(() => {
+      alert('¡Ronda terminada!');
+      
+      // Iniciar nueva ronda manteniendo las puntuaciones
+      this.startNewRound();
+    }, 500);
   }
+}
+ 
+// Agregar este nuevo método para iniciar una nueva ronda
+private startNewRound(): void {
+  // Mantener los jugadores y sus puntuaciones actuales
+  const currentPlayers = this.playersSubject.value;
+  const currentPlayerIndex = this.currentPlayerSubject.value;
   
+  // Reinicializar solo las cartas
+  this.initializeCards();
+  
+  // El juego sigue iniciado
+  this.gameStartedSubject.next(true);
+}
   // Reiniciar el juego
   resetGame(): void {
     this.gameStartedSubject.next(false);
@@ -169,4 +183,26 @@ export class GameService {
     this.currentPlayerSubject.next(0);
     this.selectedCards = [];
   }
+
+  // Agregar este método al GameService existente
+// esta función para que reinicie las puntuaciones
+playAgain(): void {
+  // Reiniciar puntuaciones de los jugadores
+  const currentPlayers = this.playersSubject.value;
+  const resetPlayers = currentPlayers.map((player, index) => ({
+    ...player,
+    score: 0,
+    turn: index === 0 // El primer jugador comienza
+  }));
+  
+  // Actualizar los jugadores con puntuaciones reiniciadas
+  this.playersSubject.next(resetPlayers);
+  this.currentPlayerSubject.next(0);
+  
+  // Reinicializar las cartas
+  this.initializeCards();
+  
+  // El juego sigue iniciado
+  this.gameStartedSubject.next(true);
+}
 }
