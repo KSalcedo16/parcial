@@ -6,13 +6,21 @@ import { GameBoardComponent } from '../game-board/game-board.component';
 import { GameService } from '../../services/game.service';
 import { UsuarioService } from '../../services/usuario.service';
 
+import { RouterModule } from '@angular/router';
+
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule, GameBoardComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    GameBoardComponent,
+    RouterModule // ✅ ¡AGREGAR ESTO!
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
+
 export class HomeComponent {
   playerMode: 'single' | 'multi' = 'single';
   player1Name: string = '';
@@ -47,7 +55,26 @@ startGame(): void {
         return;
       }
 
-      this.gameService.startGame([this.jugadorRegistrado1]);
+    const mapping: { [name: string]: number } = {};
+this.usuariosRegistrados.forEach(usuario => {
+  mapping[usuario.name] = usuario.id;
+});
+
+console.log('📌 Mapping de jugadores:', mapping); // Agregado
+console.log('📌 Jugador 1:', this.jugadorRegistrado1);
+console.log('📌 Jugador 2:', this.jugadorRegistrado2);
+
+this.gameService.setUserIds(mapping);
+
+this.gameService.setPartidaId(14); // <-- puedes ponerlo dinámico luego
+console.log('📌 Partida ID usada:', 14); // Agregado
+
+this.gameService.startGame([this.jugadorRegistrado1, this.jugadorRegistrado2]);
+
+
+this.gameService.setPartidaId(14); // o el ID dinámico si lo tienes
+this.gameService.startGame([this.jugadorRegistrado1]);
+
 
     } else {
       // ✅ REGISTRAR NUEVO JUGADOR
@@ -82,7 +109,15 @@ startGame(): void {
         return;
       }
 
-      this.gameService.startGame([this.jugadorRegistrado1, this.jugadorRegistrado2]);
+      const mapping: { [name: string]: number } = {};
+this.usuariosRegistrados.forEach(usuario => {
+  mapping[usuario.name] = usuario.id;
+});
+this.gameService.setUserIds(mapping);
+
+this.gameService.setPartidaId(14); // aquí puedes pasar el ID correcto de la partida
+this.gameService.startGame([this.jugadorRegistrado1, this.jugadorRegistrado2]);
+
 
     } else {
       // ✅ REGISTRAR DOS JUGADORES NUEVOS

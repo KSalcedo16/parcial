@@ -3,7 +3,8 @@
 
   <div *ngIf="!gameStarted" class="setup-container">
     <h2>Configuración del Juego</h2>
-
+  <button routerLink="/estadisticas">📊 Ver Estadísticas</button>
+  
     <div class="mode-selector">
       <h3>Selecciona el modo de juego:</h3>
       <div class="radio-group">
@@ -92,6 +93,8 @@
         <li *ngFor="let usuario of usuariosRegistradosFiltrados">
           {{ usuario.name }} - {{ usuario.email }}
           <button (click)="eliminarUsuario(usuario.id)">❌</button>
+   
+
         </li>
       </ul>
 

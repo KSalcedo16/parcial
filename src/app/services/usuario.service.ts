@@ -33,5 +33,14 @@ export class UsuarioService {
   const url = `https://apigame.gonzaloandreslucio.com/api/users/${id}`;
   return this.http.delete(url);
 }
+// src/app/services/partida-usuario.service.ts
+registrarAciertos(datos: {
+  partida_id: number,
+  user_id: number,
+  aciertos: number,
+  tiempo: number
+}) {
+  return this.http.post(`${this.apiUrl}/aciertos`, datos);
+}
 
 }

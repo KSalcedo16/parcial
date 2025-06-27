@@ -3,6 +3,9 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Card } from '../models/card';
 import { Player } from '../models/player';
+import { PartidaUsuarioService } from './partida-usuario.service';
+import { UsuarioService } from './usuario.service'; // Opcional si necesitas el ID del usuario
+
 
 @Injectable({
   providedIn: 'root'
@@ -17,16 +20,32 @@ export class GameService {
   private currentPlayerSubject = new BehaviorSubject<number>(0);
   private gameStartedSubject = new BehaviorSubject<boolean>(false);
   
+  
   // Propiedades para el manejo del juego
   private selectedCards: Card[] = [];
-  
+  private partidaId: number = 1; // puedes reemplazar luego si generas dinámicamente partidas
+  private playerUserIds: { [name: string]: number } = {}; // para relacionar nombre con user_id
+  private tiempoInicio!: number;
+
+  setPartidaId(id: number): void {
+  this.partidaId = id;
+}
+
+setUserIds(mapping: { [name: string]: number }): void {
+  this.playerUserIds = mapping;
+}
+
+
   // Observables públicos
   cards$ = this.cardsSubject.asObservable();
   players$ = this.playersSubject.asObservable();
   currentPlayer$ = this.currentPlayerSubject.asObservable();
   gameStarted$ = this.gameStartedSubject.asObservable();
+
   
-  constructor() { }
+  constructor( 
+    private partidaUsuarioService: PartidaUsuarioService
+  ) { }
   
   // Iniciar el juego con los jugadores registrados
   startGame(players: string[]): void {
@@ -45,6 +64,8 @@ export class GameService {
     
     // Marcar que el juego ha comenzado
     this.gameStartedSubject.next(true);
+    this.tiempoInicio = Date.now(); // Guardamos el tiempo de inicio en milisegundos
+
   }
   
   // Inicializar y mezclar las cartas
@@ -154,27 +175,44 @@ export class GameService {
     
    // Verificar si el juego ha terminado
   if (updatedCards.every(card => card.matched)) {
-    setTimeout(() => {
-      alert('¡Ronda terminada!');
-      
-      // Iniciar nueva ronda manteniendo las puntuaciones
-      this.startNewRound();
-    }, 500);
-  }
+  const tiempoTotal = Math.floor((Date.now() - this.tiempoInicio) / 1000); // en segundos
+
+  // Guardar aciertos por cada jugador
+  this.playersSubject.value.forEach(player => {
+    const aciertos = player.score;
+    const userId = this.playerUserIds[player.name];
+
+    if (userId && this.partidaId) {
+      this.partidaUsuarioService.registrarAciertos({
+        partida_id: this.partidaId,
+        user_id: userId,
+        aciertos,
+        tiempo: tiempoTotal
+      }).subscribe({
+        next: () => console.log(`✅ Aciertos registrados para ${player.name}`),
+        error: () => console.error(`❌ Error al registrar aciertos de ${player.name}`)
+      });
+    }
+  });
+
+  setTimeout(() => {
+    alert('¡Ronda terminada!');
+    this.startNewRound();
+  }, 500);
 }
- 
+
+}
+
 // Agregar este nuevo método para iniciar una nueva ronda
 private startNewRound(): void {
-  // Mantener los jugadores y sus puntuaciones actuales
   const currentPlayers = this.playersSubject.value;
   const currentPlayerIndex = this.currentPlayerSubject.value;
-  
-  // Reinicializar solo las cartas
+
   this.initializeCards();
-  
-  // El juego sigue iniciado
   this.gameStartedSubject.next(true);
+  this.tiempoInicio = Date.now(); // <-- Reinicia el tiempo aquí
 }
+
   // Reiniciar el juego
   resetGame(): void {
     this.gameStartedSubject.next(false);

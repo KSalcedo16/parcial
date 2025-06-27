@@ -1,0 +1,21 @@
+
+<div *ngIf="!aciertos.length">Cargando estadísticas...</div>
+
+<table *ngIf="aciertos.length" class="stats-table">
+  <thead>
+    <tr>
+      <th>Jugador</th>
+      <th>Partida ID</th>
+      <th>Aciertos</th>
+      <th>Tiempo (s)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let stat of aciertos">
+      <td>{{ stat.usuario?.name || 'Desconocido' }}</td>
+      <td>{{ stat.partida_id }}</td>
+      <td>{{ stat.aciertos }}</td>
+      <td>{{ stat.tiempo }}</td>
+    </tr>
+  </tbody>
+</table>
